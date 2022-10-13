@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FoodItemsController;
 use App\Http\Controllers\homeController;
+use App\Http\Controllers\OtpController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +21,11 @@ use Illuminate\Support\Facades\Route;
 Route::post('/signup', [AuthController::class, 'sign_up']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
-Route::get('/otp', [homeController::class, 'index']);
+Route::post('/otp', [AuthController::class, 'requestOtp']);
+Route::post('verifyotp', [AuthController::class, 'verifyOtp']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/user', [AuthController::class, 'test']);
+    Route::post('/addnewmenuitem', [FoodItemsController::class, 'index']);
+    Route::get('/sellermenu', [FoodItemsController::class, 'SellerMenu']);
+    Route::get('/AllMenu', [FoodItemsController::class, 'AllMenu']);
 });
