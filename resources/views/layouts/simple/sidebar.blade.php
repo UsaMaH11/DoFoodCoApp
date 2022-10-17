@@ -28,7 +28,7 @@
                         <a class="sidebar-link sidebar-title" href="#"><i data-feather="home"></i><span class="lan-3">Dashboards</span></a>
                     </li>
                     <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title" href="#"><i data-feather="users"></i><span class="lan-3">User Management</span></a>
+                        <a class="sidebar-link sidebar-title" href="/admin/user-management"><i data-feather="users"></i><span class="lan-3">User Management</span></a>
                     </li>
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="#"><i data-feather="shopping-bag"></i><span class="lan-3">Shop Management</span></a>

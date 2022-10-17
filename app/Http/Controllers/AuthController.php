@@ -112,4 +112,8 @@ class AuthController extends Controller
             return response(["status" => 401, 'message' => 'Invalid']);
         }
     }
+
+    public function getUsersList(){
+        return User::whereIn('type', ['buyer', 'seller'])->get();
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,11 @@ Route::get('/', function () {
 Auth::routes();
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+    /* USERS MANAGEMENT ROUTES */
+    Route::get('/user-management', [App\Http\Controllers\HomeController::class, 'userManagementIndex'])->name('user-management');
+    Route::controller(AuthController::class)->prefix('user')->group(function () {
+        Route::get('/list', 'getUsersList');
+    });
 });
