@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FoodItemsController;
 use App\Http\Controllers\homeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OtpController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/otp', [AuthController::class, 'requestOtp']);
 Route::post('verifyotp', [AuthController::class, 'verifyOtp']);
+Route::get('pay_by_stripe', [OrderController::class, 'payByStripe']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/addnewmenuitem', [FoodItemsController::class, 'index']);
