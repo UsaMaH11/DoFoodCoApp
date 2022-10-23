@@ -19,6 +19,7 @@ class AuthController extends Controller
             'password' => 'required|string',
 
         ]);
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -107,7 +108,7 @@ class AuthController extends Controller
 
             // $accessToken = auth()->user()->createToken('authToken')->accessToken;
 
-            return response(["status" => 200, "message" => "Success", 'user' => auth()->user(), 'access_token' => $token]);
+            return response(["status" => 200, "message" => "Otp Authentication successful", 'user' => auth()->user(), 'access_token' => $token]);
         } else {
             return response(["status" => 401, 'message' => 'Invalid']);
         }
