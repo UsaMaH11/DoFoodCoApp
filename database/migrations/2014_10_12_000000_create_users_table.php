@@ -24,6 +24,9 @@ return new class extends Migration
             $table->enum('Type', ['buyer', 'seller', 'admin'])->default('buyer');
             $table->string('profile_picture')->nullable();
             $table->string('location');
+            $table->tinyInteger('isEmailVerified')->default(0);
+            $table->tinyInteger('isPhoneVerified')->default(0);
+            $table->tinyInteger('isIdVerified')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

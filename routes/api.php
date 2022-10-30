@@ -24,10 +24,19 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/otp', [AuthController::class, 'requestOtp']);
 Route::post('verifyotp', [AuthController::class, 'verifyOtp']);
+Route::post('/mobileotp', [AuthController::class, 'sendMobileOtp']);
+
+
+
 Route::get('pay_by_stripe', [OrderController::class, 'payByStripe']);
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/addnewmenuitem', [FoodItemsController::class, 'index']);
     Route::get('/sellermenu', [FoodItemsController::class, 'SellerMenu']);
     Route::get('/AllMenu', [FoodItemsController::class, 'AllMenu']);
+    Route::get('/chat', 'ChatsController@index');
+    Route::get('messages', 'ChatsController@fetchMessages');
+    Route::post('messages', 'ChatsController@sendMessage');
+    Route::get("/isLoggedIn", [AuthController::class, 'userInfo']);
 });

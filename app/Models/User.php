@@ -23,8 +23,17 @@ class User extends Authenticatable
         'password',
         'type',
         'status',
-        'location'
+        'location',
+        'profile_picture',
+        'isEmailVerified',
+        'isPhoneVerified',
+        'isIdVerified'
     ];
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
