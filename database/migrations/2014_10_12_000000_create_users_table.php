@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string("otp")->nullable();
-            $table->enum('status', ['active', 'inactive', 'terminated'])->default('inactive');
+            $table->enum('status', ['active', 'inactive', 'terminated'])->default('active');
             $table->enum('Type', ['buyer', 'seller', 'admin'])->default('buyer');
             $table->string('profile_picture')->nullable();
             $table->string('location');

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class AuthController extends Controller
 {
@@ -24,20 +26,29 @@ class AuthController extends Controller
             ]);
             if ($request->hasFile('profile_picture')) {
 
-                $this->validate($request, [
-                    'profile_picture' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-                ]);
+                // $this->validate($request, [
+                //     'profile_picture' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+                // ]);
                 $image_path = $request->file('profile_picture')->store('profiles', 'public');
+                $user = new User([
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'password' => bcrypt($data['password']),
+                    'status' => $request['status'],
+                    'type' => $request['type'],
+                    'location' => $request['location'],
+                    'profile_picture' => $image_path
+                ]);
+            } else {
+                $user = new User([
+                    'name' => $data['name'],
+                    'email' => $data['email'],
+                    'password' => bcrypt($data['password']),
+                    'status' => $request['status'],
+                    'type' => $request['type'],
+                    'location' => $request['location'],
+                ]);
             }
-            $user = new User([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => bcrypt($data['password']),
-                'status' => $request->status,
-                'type' => $request->type,
-                'location' => $request->location,
-                'profile_picture' => $image_path
-            ]);
 
             $user->save();
 
@@ -208,5 +219,20 @@ class AuthController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    public function PythonScript(Request $request)
+    {
+        $process = new Process(['python3', 'python/main.py']);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        $data = $process->getOutput();
+        return $data;
+
+        dd($data);
     }
 }
