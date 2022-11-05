@@ -28,6 +28,8 @@ Route::post('/mobileotp', [AuthController::class, 'sendMobileOtp']);
 
 
 
+Route::post('/faceSimilarity', [AuthController::class, 'PythonScript']);
+
 Route::get('pay_by_stripe', [OrderController::class, 'payByStripe']);
 
 
