@@ -37,7 +37,8 @@ class AuthController extends Controller
                     'status' => $request['status'],
                     'type' => $request['type'],
                     'location' => $request['location'],
-                    'profile_picture' => $image_path
+                    'profile_picture' => $image_path,
+                    
                 ]);
             } else {
                 $user = new User([
@@ -51,11 +52,11 @@ class AuthController extends Controller
             }
 
             $user->save();
-
-            $token = $user->createToken('apiToken')->plainTextToken;
+            $data  = User::find($user->id);
+            $token = $data->createToken('apiToken')->plainTextToken;
 
             $res = [
-                'user' => $user,
+                'user' => $data,
                 'token' => $token
             ];
             return response()->json(["status" => 200, "data" => $res, "success" => true]);
@@ -103,9 +104,41 @@ class AuthController extends Controller
         ]);
     }
 
-    public function test()
+    public function updateUserInfo(Request $request)
     {
-        return "usama tariq";
+        try {
+            if ($request->get('index') == "profile_picture") {
+                $index = $request->get('index');
+                // $this->validate($request, [
+                //     'profile_picture' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+                // ]);
+                $image_path = $request->file('value')->store('public');
+                $update = User::where('id',Auth::user()->id)->update([
+                        $index => $image_path
+                ]);
+            }
+                else{
+                     $index = $request->get('index');
+                    $value = $request->get('value');
+                    //   $company_id = 1;
+
+                    $update = User::where('id',Auth::user()->id)->update([
+                        $index => $value
+                ]);
+
+                }
+            // return $request->get('index');
+           
+                $data = User::find(Auth::user()->id);
+                if($update){
+                    return response()->json(['response'=>200,'data' => $data, 'status' => true]);
+                }else{
+                    return response()->json(['response'=>401,'message' => 'there was some error updating data','status'=>false]);
+                }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+     
     }
     public function requestOtp(Request $request)
     {
@@ -158,64 +191,18 @@ class AuthController extends Controller
         return User::whereIn('type', ['buyer', 'seller'])->get();
     }
 
-    // public function sendMobileOtp(Request $request)
-    // {
-    //     $curl = curl_init();
-
-    //     curl_setopt_array($curl, array(
-    //         CURLOPT_URL => 'https://www.getapistack.com/api/v1/otp/send',
-    //         CURLOPT_RETURNTRANSFER => true,
-    //         CURLOPT_ENCODING => '',
-    //         CURLOPT_MAXREDIRS => 10,
-    //         CURLOPT_TIMEOUT => 0,
-    //         CURLOPT_FOLLOWLOCATION => true,
-    //         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    //         CURLOPT_CUSTOMREQUEST => 'POST',
-    //         CURLOPT_POSTFIELDS => '{"messageFormat":"Hello, this is your OTP ${otp}. Please do not share it with anyone","phoneNumber":"+14842918959","otpLength":6,"otpValidityInSeconds":120}',
-    //         CURLOPT_HTTPHEADER => array(
-    //             'x-as-apikey: api-key',
-    //             'Content-Type: application/json'
-    //         ),
-    //     ));
-
-    //     $response = curl_exec($curl);
-
-    //     curl_close($curl);
-    //     echo $response;
-    // }
-
-    // public function verifyMobileOtp(Request $request)
-    // {
-    //     $curl = curl_init();
-
-    //     curl_setopt_array($curl, array(
-    //         CURLOPT_URL => 'https://www.getapistack.com/api/v1/otp/verify',
-    //         CURLOPT_RETURNTRANSFER => true,
-    //         CURLOPT_ENCODING => '',
-    //         CURLOPT_MAXREDIRS => 10,
-    //         CURLOPT_TIMEOUT => 0,
-    //         CURLOPT_FOLLOWLOCATION => true,
-    //         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    //         CURLOPT_CUSTOMREQUEST => 'POST',
-    //         CURLOPT_POSTFIELDS => '{"requestId":"43cc5367-9420-4462-8326-123a26cd8673","otp":"12344"}',
-    //         CURLOPT_HTTPHEADER => array(
-    //             'x-as-apikey: api-key',
-    //             'Content-Type: application/json'
-    //         ),
-    //     ));
-
-    //     $response = curl_exec($curl);
-
-    //     curl_close($curl);
-    //     echo $response;
-    // }
 
     public function userInfo(Request $request)
     {
         try {
             $userId = Auth()->user()->id;
-            $userInfo = User::where('id', $userId)->get();
-            return response()->json(["status" => 200, "data" => $userInfo, "ssuccess" => true]);
+            $user = User::find($userId);
+            $token = $user->createToken('apiToken')->plainTextToken;
+            $data = [
+                "user" => $user,
+                "token" => $token
+            ];
+            return response()->json(["status" => 200, "data" => $data, "ssuccess" => true]);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -250,4 +237,5 @@ class AuthController extends Controller
         }
         
     }
+
 }
