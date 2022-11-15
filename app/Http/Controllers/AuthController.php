@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use Twilio\Rest\Client;
 
 class AuthController extends Controller
 {
@@ -143,9 +144,12 @@ class AuthController extends Controller
     public function requestOtp(Request $request)
     {
         try {
-            $otp = rand(1000, 9999);
+            $checkIfVerfied = User::where('id', auth()->user()->id)->first();
+            if($checkIfVerfied->isEmailVerified != 1){
+              $otp = rand(1000, 9999);
             Log::info("otp = " . $otp);
-            $user = User::where('email', '=', $request->email)->update(['otp' => $otp]);
+            $userId = Auth()->user()->id;
+            $user = User::where('id',$userId)->update(['otp' => $otp]);
 
             if ($user) {
                 // send otp in the email
@@ -160,6 +164,11 @@ class AuthController extends Controller
             } else {
                 return response(["status" => 401, 'message' => 'Invalid information', "success" => false]);
             }
+            }
+            else{
+                return response()->json(["message" => "Your are already authenticated"]);
+            }
+            
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -169,15 +178,17 @@ class AuthController extends Controller
     public function verifyOtp(Request $request)
     {
         try {
-            $user  = User::where([['email', '=', $request->email], ['otp', '=', $request->otp]])->first();
+
+            $user  = User::where([['id','=', auth()->user()->id ], ['otp', '=', $request->otp]])->first();
             if ($user) {
-                auth()->login($user, true);
-                User::where('email', '=', $request->email)->update(['otp' => null]);
-                $token = $user->createToken('apiToken')->plainTextToken;
+                User::where('id', '=', auth()->user()->id)->update(['otp' => null]);
+                 $userData = User::where('id',auth()->user()->id)->update(['isEmailVerified' => 1]);
+                 $userD = User::where('id',auth()->user()->id)->first();
+                $token = $userD->createToken('apiToken')->plainTextToken;
 
                 // $accessToken = auth()->user()->createToken('authToken')->accessToken;
 
-                return response(["status" => 200, "message" => "Otp Authentication successful", 'user' => auth()->user(), 'access_token' => $token, "success" => true]);
+                return response(["status" => 200, "message" => "Otp Authentication successful", 'user' => $userD, 'access_token' => $token, "success" => true]);
             } else {
                 return response(["status" => 401, 'message' => 'Invalid information', 'success' => false]);
             }
@@ -208,34 +219,101 @@ class AuthController extends Controller
         }
     }
 
-    public function PythonScript(Request $request)
-    {
-        try {
+    // public function PythonScript(Request $request)
+    // {
+    //     try {
             
-            $this->validate($request, [
-                    'faceImage' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-                    'idImage' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
-                ]);
+    //         $this->validate($request, [
+    //                 'faceImage' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+    //                 'idImage' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+    //             ]);
 
-            $faceImage = $request->file('faceImage');
-            $idImage = $request->file('idImage');
+    //         $faceImage = $request->file('faceImage');
+    //         $idImage = $request->file('idImage');
 
-        $process = new Process(['python3', 'python/main.py', $faceImage,$idImage]);
-        $process->run();
+    //     $process = new Process(['python3', 'python/main.py', $faceImage,$idImage]);
+    //     $process->run();
 
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
+    //     if (!$process->isSuccessful()) {
+    //         throw new ProcessFailedException($process);
+    //     }
+    //     // $output = json_decode($process->getOutput(), true);
+    //     // $jsonData = stripslashes(html_entity_decode($process->getOutput()));
+    //     $output = json_decode($process->getOutput(), true);
+    //     return response()->json(["status" => 200 , "data"=>$output , "success" => true]);
+
+    //     dd($data);
+    //     } catch (\Throwable $th) {
+    //         throw $th;
+    //     }
+    
+    //   }
+     public function sendMobileOtp(Request $request)
+    {
+        $user = Auth::user();
+        if($user->isPhoneVerified != 1){
+        $otp = mt_rand(1000,9999);
+        $user = User::where('id', auth()->user()->id)->update(['otp' => $otp]);
+        // User::updateOrCreate(
+        //     [ 'id' => $user->id ],
+        //     [ 'otp' => $otp ]
+        // );
+ 
+        $receiverNumber = $request->phone;
+        // $receiverNumber = "3450888225";
+ 
+ 
+        $message = "Your login code is ". $otp;
+ 
+        try {
+ 
+            $accountSid = getenv("TWILIO_SID","AC1f8c63106c042960dba7ed07a2cc68db");
+            $authToken = getenv("TWILIO_TOKEN","d600283c7eb80fa7a9cdf408e64c3787");
+            $twilioNumber = getenv("TWILIO_FROM","+15627844695");
+ 
+            $client = new Client("AC1f8c63106c042960dba7ed07a2cc68db", "d600283c7eb80fa7a9cdf408e64c3787");
+ 
+            $client->messages->create("+92".$receiverNumber, [
+                'from' => "+15627844695", 
+                'body' => $message
+            ]);
+
+            return response()->json(['status' => 200, "message" => "sent successfully"]);
+ 
+        } catch (Exception $e) {
+            info("Error: ". $e->getMessage());
         }
-        // $output = json_decode($process->getOutput(), true);
-        // $jsonData = stripslashes(html_entity_decode($process->getOutput()));
-        $output = json_decode($process->getOutput(), true);
-        return response()->json(["status" => 200 , "data"=>$output , "success" => true]);
+        }else{
+            return response()->json(['status' => 200, "message" => "You are already authenticated"]);
+        }       
+        
+    }
 
-        dd($data);
+    public function verifyMobileOtp(Request $request)
+    {   
+        try {
+            $request->validate([
+            'otp'=>'required',
+        ]);
+ 
+        $user = User::where('id', auth()->user()->id)
+                        ->where('otp', $request->otp)
+                        ->first();
+ 
+        if (!is_null($user)) {
+            $request->user()->otp = null;
+            $request->user()->save();
+            $userData = User::where('id',auth()->user()->id)->update(['isPhoneVerified' => 1]);
+            $userD = User::where('id',auth()->user()->id)->first();
+            $token = $userD->createToken('apiToken')->plainTextToken;
+            return response()->json(["success"=> true, "message" => "otp verification successful", "data" => $userD , 'token' => $token]);
+        }
+ 
+        return response()->json(["error"=> "You entered wrong code."]); 
         } catch (\Throwable $th) {
             throw $th;
         }
-        
+       
     }
 
 }

@@ -5,6 +5,9 @@ use App\Http\Controllers\FoodItemsController;
 use App\Http\Controllers\homeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OtpController;
+use App\Http\Controllers\idAnalyzerController;
+
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,14 +25,17 @@ use Illuminate\Support\Facades\Route;
 Route::post('/signup', [AuthController::class, 'sign_up']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
-Route::post('/otp', [AuthController::class, 'requestOtp']);
-Route::post('verifyotp', [AuthController::class, 'verifyOtp']);
-Route::post('/mobileotp', [AuthController::class, 'sendMobileOtp']);
+
+
+
+
 
 
 
 Route::post('/faceSimilarity', [AuthController::class, 'PythonScript']);
 
+Route::post('/idCheck', [idAnalyzerController::class, 'idAnalyzer']);
+Route::post('/checkBackground', [idAnalyzerController::class, 'backgroundCheck']);
 Route::get('pay_by_stripe', [OrderController::class, 'payByStripe']);
 
 
@@ -42,5 +48,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('messages', 'ChatsController@sendMessage');
     Route::get("/isLoggedIn", [AuthController::class, 'userInfo']);
     Route::post("/updateUserInfo", [AuthController::class, 'updateUserInfo']);
+
+    Route::post('/otp', [AuthController::class, 'requestOtp']);
+    Route::post('verifyotp', [AuthController::class, 'verifyOtp']);
+    Route::post('/mobileotp', [AuthController::class, 'sendMobileOtp']);
+    Route::post('/verifymobileotp', [AuthController::class, 'verifyMobileOtp']);
 
 });

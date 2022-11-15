@@ -19,7 +19,11 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Auth::routes();
 
+Route::get('/', 'ChatsController@index');
+Route::get('messages', 'ChatsController@fetchMessages');
+Route::post('messages', 'ChatsController@sendMessage');
 
 Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');

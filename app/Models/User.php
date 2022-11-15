@@ -27,7 +27,8 @@ class User extends Authenticatable
         'profile_picture',
         'isEmailVerified',
         'isPhoneVerified',
-        'isIdVerified'
+        'isIdVerified',
+        'otp'
     ];
 
     public function messages()
@@ -53,4 +54,5 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+   
 }
