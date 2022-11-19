@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Validation;
 
@@ -65,5 +67,30 @@ class OrderController extends Controller
 			}
         });
 		return $transaction;
+    }   
+    public function addToCart($product_id){
+        if(Auth::check()){
+            $checkPrevious = Cart::where(['user_id'=>Auth::id(), 'product_id'=>$product_id])->first();
+            if($checkPrevious){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'already exist',
+                ]);
+            }else{
+                $cart = new Cart();
+                $cart->user_id = Auth::id();
+                $cart->product_id = $product_id;
+                $cart->save();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'added to cart',
+                ]);
+            }
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'please login first',
+            ]);
+        }
     }
 }

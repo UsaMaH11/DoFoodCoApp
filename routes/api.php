@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FoodItemsController;
 use App\Http\Controllers\homeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\idAnalyzerController;
 
@@ -36,7 +37,8 @@ Route::post('/faceSimilarity', [AuthController::class, 'PythonScript']);
 
 Route::post('/idCheck', [idAnalyzerController::class, 'idAnalyzer']);
 Route::post('/checkBackground', [idAnalyzerController::class, 'backgroundCheck']);
-Route::get('pay_by_stripe', [OrderController::class, 'payByStripe']);
+Route::get('pay-by-stripe', [OrderController::class, 'payByStripe']);
+Route::get('add-to-cart/{product_id}', [OrderController::class, 'addToCart']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -53,5 +55,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('verifyotp', [AuthController::class, 'verifyOtp']);
     Route::post('/mobileotp', [AuthController::class, 'sendMobileOtp']);
     Route::post('/verifymobileotp', [AuthController::class, 'verifyMobileOtp']);
+
+    Route::post('/request-open-store', [AdminController::class, 'requestOpenStore']);
 
 });

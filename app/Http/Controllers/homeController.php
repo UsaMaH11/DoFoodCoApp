@@ -29,4 +29,8 @@ class HomeController extends Controller
     {
         return view('admin.user-management');
     }
+    public function shopManagementIndex()
+    {
+        return view('admin.shop-management');
+    }
 }

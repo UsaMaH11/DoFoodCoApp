@@ -196,13 +196,6 @@ class AuthController extends Controller
             throw $th;
         }
     }
-
-    public function getUsersList()
-    {
-        return User::whereIn('type', ['buyer', 'seller'])->get();
-    }
-
-
     public function userInfo(Request $request)
     {
         try {

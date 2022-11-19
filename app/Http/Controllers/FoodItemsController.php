@@ -10,7 +10,6 @@ class FoodItemsController extends Controller
 {
     public function index(Request $request)
     {
-
         $data = $request->validate([
             'food_title' => 'required|string',
             'description' => 'required|string',
@@ -29,6 +28,19 @@ class FoodItemsController extends Controller
                 'food_status' => $data['food_status'],
                 'price' => $data['price']
             ]);
+            /** MULTIPLE IMAGES */
+            foreach($data['multiImages'] as $img)
+            {
+                $file = $img;
+                $extension = $file->getClientOriginalExtension(); 
+                $fileName = rand(1111122222, 9999900000) . '.' . $extension;
+                $location = 'storage/food/';
+                $file->move($location,$fileName);
+                $final_photosfilename[] = $fileName;
+            }
+            $foodItem->gallery = implode(',', $final_photosfilename);
+            $foodItem->update();
+            /** MULTIPLE IMAGES END */
             return response()->json(["status" => "success", "message" => "Item added successfully"]);
         } catch (\Throwable $th) {
             return $th;
