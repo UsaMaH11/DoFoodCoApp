@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FoodItems;
 use App\Models\User;
 use App\Models\Store;
 use Illuminate\Http\Request;
@@ -61,6 +62,18 @@ class AdminController extends Controller
         $store = Store::find($store_id);
         $store->status = 'active';
         if($store->update()){
+            return response()->json(["success" => true]);
+        }else{
+            return response()->json(["success" => false]);
+        }
+    }
+    public function foodList(){
+        return FoodItems::where('status', 'processing')->with('Store')->get();
+    }
+    public function activeFood($food_id){
+        $food = FoodItems::find($food_id);
+        $food->status = 'active';
+        if($food->update()){
             return response()->json(["success" => true]);
         }else{
             return response()->json(["success" => false]);

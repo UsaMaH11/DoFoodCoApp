@@ -33,4 +33,8 @@ class HomeController extends Controller
     {
         return view('admin.shop-management');
     }
+    public function requestedFood()
+    {
+        return view('admin.requested-food');
+    }
 }
