@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "700ead0b13f0dbeda00c7ba213a8d5a2",
+    "content-hash": "a664dfb91df41c9c657ec0a370c985c4",
     "packages": [
         {
             "name": "brick/math",
@@ -896,6 +896,63 @@
                 }
             ],
             "time": "2022-08-28T14:45:39+00:00"
+        },
+        {
+            "name": "idanalyzer/id-analyzer-php-sdk",
+            "version": "v1.2.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/idanalyzer/id-analyzer-php-sdk.git",
+                "reference": "c3aea25e177f21658f791a82caa91565e61977e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/idanalyzer/id-analyzer-php-sdk/zipball/c3aea25e177f21658f791a82caa91565e61977e0",
+                "reference": "c3aea25e177f21658f791a82caa91565e61977e0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "IDAnalyzer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "ID Analyzer",
+                    "email": "support@idanalyzer.com",
+                    "homepage": "http://www.idanalyzer.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "ID scanning and verification PHP SDK for worldwide driver license, passport, ID card scanning and identity verification using ID Analyzer API.",
+            "homepage": "https://www.idanalyzer.com",
+            "keywords": [
+                "ID Card",
+                "aamva",
+                "aml",
+                "driver license",
+                "id analyzer",
+                "id ocr",
+                "id verification",
+                "identity verification",
+                "mrz",
+                "passport",
+                "pdf417",
+                "pep"
+            ],
+            "support": {
+                "issues": "https://github.com/idanalyzer/id-analyzer-php-sdk/issues",
+                "source": "https://github.com/idanalyzer/id-analyzer-php-sdk/tree/v1.2.5"
+            },
+            "time": "2021-04-16T18:34:54+00:00"
         },
         {
             "name": "laravel/framework",
@@ -5397,6 +5454,55 @@
             "time": "2022-09-12T13:28:28+00:00"
         },
         {
+            "name": "twilio/sdk",
+            "version": "6.43.2",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:twilio/twilio-php.git",
+                "reference": "3050f35b4c4587042a21c982a3aa1707c3dc940b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/3050f35b4c4587042a21c982a3aa1707c3dc940b",
+                "reference": "3050f35b4c4587042a21c982a3aa1707c3dc940b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "^6.3 || ^7.0",
+                "phpunit/phpunit": ">=7.0"
+            },
+            "suggest": {
+                "guzzlehttp/guzzle": "An HTTP client to execute the API requests"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Twilio\\": "src/Twilio/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Twilio API Team",
+                    "email": "api@twilio.com"
+                }
+            ],
+            "description": "A PHP wrapper for Twilio's API",
+            "homepage": "https://github.com/twilio/twilio-php",
+            "keywords": [
+                "api",
+                "sms",
+                "twilio"
+            ],
+            "time": "2022-11-10T16:36:00+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v5.5.0",
             "source": {
@@ -8069,5 +8175,5 @@
         "php": "^8.0.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.0.0"
 }

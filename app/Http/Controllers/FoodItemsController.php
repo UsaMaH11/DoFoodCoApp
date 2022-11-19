@@ -5,27 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\FoodItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Validator;
+use App\Models\Store;
 
 class FoodItemsController extends Controller
 {
     public function index(Request $request)
     {
+        // return $request;
         $data = $request->validate([
             'food_title' => 'required|string',
             'description' => 'required|string',
             'cook_time' => 'required|string',
             'type' => 'required',
-            'food_status' => 'required',
-            'price' => 'required'
+            'status' => 'required',
+            'price' => 'required',
+            'multiImages' => 'required'
         ]);
         try {
             $foodItem = FoodItems::create([
                 'food_title' => $data['food_title'],
-                'user_id' => Auth::user()->id,
+                'store_id' => Store::where('user_id', Auth::user()->id)->first('id'),
                 'description' => $data['description'],
                 'cook_time' => $data['cook_time'],
                 'type' => $data['type'],
-                'food_status' => $data['food_status'],
+                'status' => $data['status'],
                 'price' => $data['price']
             ]);
             /** MULTIPLE IMAGES */
@@ -38,7 +42,7 @@ class FoodItemsController extends Controller
                 $file->move($location,$fileName);
                 $final_photosfilename[] = $fileName;
             }
-            $foodItem->gallery = implode(',', $final_photosfilename);
+            $foodItem->images = implode(',', $final_photosfilename);
             $foodItem->update();
             /** MULTIPLE IMAGES END */
             return response()->json(["status" => "success", "message" => "Item added successfully"]);

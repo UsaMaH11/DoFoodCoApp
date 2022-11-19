@@ -54,7 +54,7 @@ class AdminController extends Controller
             $final_photosfilename[] = $fileName;
             $store->image = $fileName;
             $store->save();
-            return response()->json(["status" => "success", "message" => "Request has been successfully"]);
+            return response()->json(["status" => "success", "message" => "Request has been sent successfully"]);
         }
     }
     public function activeStore($store_id){

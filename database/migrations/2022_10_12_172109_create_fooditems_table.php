@@ -16,14 +16,16 @@ return new class extends Migration
         Schema::create('food_items', function (Blueprint $table) {
             $table->id();
             $table->text('food_title');
-            $table->integer('user_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('store_id');
+            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->longText('description');
             $table->tinyInteger('cook_time');
             $table->text('type');
-            $table->enum('food_status', ['approved', 'processing', 'rejected'])->default('processing');
-            $table->string('images')->nullable();
+            $table->enum('status', ['approved', 'processing', 'rejected'])->default('processing');
+            $table->text('images')->nullable();
             $table->integer('price');
             $table->timestamps();
+            
         });
     }
 
