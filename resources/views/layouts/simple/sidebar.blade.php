@@ -31,7 +31,10 @@
                         <a class="sidebar-link sidebar-title" href="/admin/user-management"><i data-feather="users"></i><span class="lan-3">User Management</span></a>
                     </li>
                     <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title" href="#"><i data-feather="shopping-bag"></i><span class="lan-3">Shop Management</span></a>
+                        <a class="sidebar-link sidebar-title" href="/admin/requested-food"><i data-feather="users"></i><span class="lan-3">Requested Food</span></a>
+                    </li>
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title" href="/admin/shop-management"><i data-feather="shopping-bag"></i><span class="lan-3">Shop Management</span></a>
                     </li>
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="#"><i data-feather="message-circle"></i><span class="lan-3">Chat Management</span></a>

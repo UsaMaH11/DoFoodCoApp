@@ -28,14 +28,16 @@ Auth::routes();
 
 Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
-    /* USERS MANAGEMENT ROUTES */
     Route::get('/user-management', [App\Http\Controllers\HomeController::class, 'userManagementIndex'])->name('user-management');
     Route::get('/shop-management', [App\Http\Controllers\HomeController::class, 'shopManagementIndex'])->name('shop-management');
+    Route::get('/requested-food', [App\Http\Controllers\HomeController::class, 'requestedFood'])->name('requested-food');
     Route::controller(AdminController::class)->prefix('user')->group(function () {
         Route::get('/list', 'getUsersList');
     });
     Route::controller(AdminController::class)->prefix('store')->group(function () {
         Route::get('/list', 'getStoreList');
         Route::get('/active/{store_id}', 'activeStore');
+        Route::get('/requested-foods', 'foodList');
+        Route::get('/food-active/{food_id}', 'activeFood');
     });
 });
