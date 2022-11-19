@@ -37,7 +37,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::controller(AdminController::class)->prefix('store')->group(function () {
         Route::get('/list', 'getStoreList');
         Route::get('/active/{store_id}', 'activeStore');
+        // Route::get('/check-background/{license_id}', 'activeStore');
         Route::get('/requested-foods', 'foodList');
         Route::get('/food-active/{food_id}', 'activeFood');
+        Route::post('/update-images', 'updateImages');
     });
+    Route::get('/store/check-background/{license_id}', [App\Http\Controllers\idAnalyzerController::class, 'backgroundCheck']);
 });

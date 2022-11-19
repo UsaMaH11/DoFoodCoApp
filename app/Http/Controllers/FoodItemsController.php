@@ -24,23 +24,23 @@ class FoodItemsController extends Controller
             'multiImages' => 'required'
         ]);
         try {
-             $foodItem = new FoodItems();
-             $foodItem->food_title= $data['food_title'];
-                $foodItem->store_id = Store::where('user_id', Auth::user()->id)->first()->id;
-                $foodItem->description = $data['description'];
-                $foodItem->cook_time = $data['cook_time'];
-                $foodItem->type = $data['type'];
-                $foodItem->status = $data['status'];
-                $foodItem->price = $data['price'];
-                foreach($data['multiImages'] as $img)
-                {
-                    $file = $img;
-                    $extension = $file->getClientOriginalExtension(); 
-                    $fileName = rand(1111122222, 9999900000) . '.' . $extension;
-                    $location = 'storage/food/';
-                    $file->move($location,$fileName);
-                    $final_photosfilename[] = $fileName;
-                }
+            $foodItem = new FoodItems();
+            $foodItem->food_title= $data['food_title'];
+            $foodItem->store_id = Store::where('user_id', Auth::user()->id)->first()->id;
+            $foodItem->description = $data['description'];
+            $foodItem->cook_time = $data['cook_time'];
+            $foodItem->type = $data['type'];
+            $foodItem->status = $data['status'];
+            $foodItem->price = $data['price'];
+            foreach($data['multiImages'] as $img)
+            {
+                $file = $img;
+                $extension = $file->getClientOriginalExtension(); 
+                $fileName = rand(1111122222, 9999900000) . '.' . $extension;
+                $location = 'storage/food/';
+                $file->move($location,$fileName);
+                $final_photosfilename[] = $fileName;
+            }
             $foodItem->images = implode(',', $final_photosfilename);
             $foodItem->save();
             /** MULTIPLE IMAGES END */

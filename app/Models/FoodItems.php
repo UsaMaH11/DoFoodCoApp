@@ -18,4 +18,8 @@ class FoodItems extends Model
         'images',
         'price'
     ];
+    public function Store()
+    {
+        return $this->belongsTo(Store::class);
+    }
 }

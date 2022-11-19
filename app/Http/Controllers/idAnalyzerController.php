@@ -64,13 +64,14 @@ return response()->json(["success" => true , "data"=> $data, "status" => 200]);
 // }
 }
 
-public function backgroundCheck(Request $request){
+public function backgroundCheck($license_id){
+    // return $license_id;
    try {
        $aml = new AMLAPI("we7HYpt3mTJLQH7fJ31aTVMJxSBd6nsu", "US");
 
         // Set AML database to all databases
         $aml->setAMLDatabase("");
-        $idNumber = $request->idNumber;
+        $idNumber = $license_id;
         // Search for a sanctioned ID number
         $result = $aml->searchByIDNumber($idNumber);
         return $result;

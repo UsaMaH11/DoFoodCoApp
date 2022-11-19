@@ -24,10 +24,12 @@ class AdminController extends Controller
             'store_name' => 'Store Name',
             'location' => 'Locatin Name',
             'image' => 'Image',
+            'license_id' => 'License id',
         ];
         $rules = array(
             'store_name' => 'required|string',
             'location' => 'required|string',
+            'license' => 'required',
             'image' => 'required|image|mimes:jpg,png,jpeg,|max:2048',
         );
 
@@ -45,6 +47,7 @@ class AdminController extends Controller
             $store = new Store();
             $store->store_name = $request->store_name;
             $store->user_id = Auth::user()->id;
+            $store->license_id = $request->license_id;
             $store->location = $request->location;
             $store->status = 'inactive';
             $file = $request->image;
@@ -68,12 +71,21 @@ class AdminController extends Controller
         }
     }
     public function foodList(){
-        return FoodItems::where('status', 'processing')->with('Store')->get();
+        return FoodItems::with('Store')->get();
     }
     public function activeFood($food_id){
         $food = FoodItems::find($food_id);
-        $food->status = 'active';
+        $food->status = 'approved';
         if($food->update()){
+            return response()->json(["success" => true]);
+        }else{
+            return response()->json(["success" => false]);
+        }
+    }
+    public function updateImages(Request $request){
+        $store = FoodItems::find($request->food_id);
+        $store->images = implode(',', $request->images);
+        if($store->update()){
             return response()->json(["success" => true]);
         }else{
             return response()->json(["success" => false]);

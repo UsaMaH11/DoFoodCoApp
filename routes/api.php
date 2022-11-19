@@ -27,19 +27,12 @@ Route::post('/signup', [AuthController::class, 'sign_up']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
-
-
-
-
-
-
 Route::post('/faceSimilarity', [AuthController::class, 'PythonScript']);
 
 Route::post('/idCheck', [idAnalyzerController::class, 'idAnalyzer']);
 Route::post('/checkBackground', [idAnalyzerController::class, 'backgroundCheck']);
 Route::get('pay-by-stripe', [OrderController::class, 'payByStripe']);
 Route::get('add-to-cart/{product_id}', [OrderController::class, 'addToCart']);
-
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/addnewmenuitem', [FoodItemsController::class, 'index']);

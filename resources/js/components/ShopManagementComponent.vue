@@ -29,6 +29,7 @@
                                         <a v-if="item.status == 'terminated'" class="btn btn-danger btn-xs" href="#">Terminated</a>
                                         <a v-if="item.status == 'active'" class="btn btn-success btn-xs" href="#">Active</a>
                                         <a v-if="item.status == 'inactive'" @click="activeStore(item.id)" class="btn btn-primary btn-xs" href="#">Inactive</a>
+                                        <a @click="checkBackground(item.license_id)" class="btn btn-primary btn-xs" href="#">Check Background</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -55,6 +56,22 @@
                 axios.get('/admin/store/list')
                 .then((res) => {
                     this.data = res.data
+                })
+            },
+            checkBackground(license_id) {
+                axios.get('/admin/store/check-background/' + license_id)
+                .then((res) => {
+                    if(res.data.items.length == 0){
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'No criminal record found.',
+                        })
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            text: 'criminal',
+                        })
+                    }
                 })
             },
             activeStore(id) {

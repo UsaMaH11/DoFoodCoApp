@@ -18,6 +18,8 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900&amp;display=swap"
         rel="stylesheet">
     @include('layouts.simple.css')
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @yield('style')
     @vite(['resources/js/app.js'])
 
