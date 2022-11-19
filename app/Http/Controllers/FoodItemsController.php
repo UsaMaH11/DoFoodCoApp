@@ -12,7 +12,8 @@ class FoodItemsController extends Controller
 {
     public function index(Request $request)
     {
-        // return $request;
+        // return Store::where('user_id', Auth::user()->id)->first()->id;
+
         $data = $request->validate([
             'food_title' => 'required|string',
             'description' => 'required|string',
@@ -23,27 +24,25 @@ class FoodItemsController extends Controller
             'multiImages' => 'required'
         ]);
         try {
-            $foodItem = FoodItems::create([
-                'food_title' => $data['food_title'],
-                'store_id' => Store::where('user_id', Auth::user()->id)->first('id'),
-                'description' => $data['description'],
-                'cook_time' => $data['cook_time'],
-                'type' => $data['type'],
-                'status' => $data['status'],
-                'price' => $data['price']
-            ]);
-            /** MULTIPLE IMAGES */
-            foreach($data['multiImages'] as $img)
-            {
-                $file = $img;
-                $extension = $file->getClientOriginalExtension(); 
-                $fileName = rand(1111122222, 9999900000) . '.' . $extension;
-                $location = 'storage/food/';
-                $file->move($location,$fileName);
-                $final_photosfilename[] = $fileName;
-            }
+             $foodItem = new FoodItems();
+             $foodItem->food_title= $data['food_title'];
+                $foodItem->store_id = Store::where('user_id', Auth::user()->id)->first()->id;
+                $foodItem->description = $data['description'];
+                $foodItem->cook_time = $data['cook_time'];
+                $foodItem->type = $data['type'];
+                $foodItem->status = $data['status'];
+                $foodItem->price = $data['price'];
+                foreach($data['multiImages'] as $img)
+                {
+                    $file = $img;
+                    $extension = $file->getClientOriginalExtension(); 
+                    $fileName = rand(1111122222, 9999900000) . '.' . $extension;
+                    $location = 'storage/food/';
+                    $file->move($location,$fileName);
+                    $final_photosfilename[] = $fileName;
+                }
             $foodItem->images = implode(',', $final_photosfilename);
-            $foodItem->update();
+            $foodItem->save();
             /** MULTIPLE IMAGES END */
             return response()->json(["status" => "success", "message" => "Item added successfully"]);
         } catch (\Throwable $th) {
