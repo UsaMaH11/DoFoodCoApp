@@ -33,11 +33,12 @@ Route::post('/idCheck', [idAnalyzerController::class, 'idAnalyzer']);
 Route::post('/checkBackground', [idAnalyzerController::class, 'backgroundCheck']);
 Route::get('pay-by-stripe', [OrderController::class, 'payByStripe']);
 Route::get('add-to-cart/{product_id}', [OrderController::class, 'addToCart']);
+Route::get('/AllMenu', [FoodItemsController::class, 'AllMenu']);
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/addnewmenuitem', [FoodItemsController::class, 'index']);
     Route::get('/sellermenu', [FoodItemsController::class, 'SellerMenu']);
-    Route::get('/AllMenu', [FoodItemsController::class, 'AllMenu']);
     Route::get('/chat', 'ChatsController@index');
     Route::get('messages', 'ChatsController@fetchMessages');
     Route::post('messages', 'ChatsController@sendMessage');

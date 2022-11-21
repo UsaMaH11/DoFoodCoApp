@@ -55,10 +55,11 @@ class FoodItemsController extends Controller
         try {
 
             $user_id = Auth::user()->id;
-            $getFoodItems = FoodItems::where('user_id', $user_id)->get();
-            return response()->json(["status" => "success", "items" => $getFoodItems]);
+            $store_id = Store::where('user_id', $user_id)->first()->id;
+            $getFoodItems = FoodItems::where('store_id', $store_id)->get();
+            return response()->json(["success" => true, "items" => $getFoodItems, "status" => 200] );
         } catch (\Throwable $th) {
-            return response()->json(["status" => "error", "message" => "something went wrong", $th]);
+            return response()->json(["status" => false, "message" => "something went wrong", $th]);
         }
     }
 
