@@ -20,6 +20,7 @@ class AdminController extends Controller
         return Store::with('User')->get();
     }
     public function requestOpenStore(Request $request){
+        
         $attributeNames = [
             'store_name' => 'Store Name',
             'location' => 'Locatin Name',
@@ -30,7 +31,7 @@ class AdminController extends Controller
             'store_name' => 'required|string',
             'location' => 'required|string',
             'license' => 'required',
-            'image' => 'required|image|mimes:jpg,png,jpeg,|max:2048',
+            'image' => 'required|mimes:jpg,png,jpeg|max:2048',
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -58,6 +59,9 @@ class AdminController extends Controller
             $final_photosfilename[] = $fileName;
             $store->image = $fileName;
             $store->save();
+            $user = User::find(Auth::id());
+            $user->isRequestedToBecomeCook = 1;
+            $user->update();
             return response()->json(["status" => "success", "message" => "Request has been sent successfully"]);
         }
     }

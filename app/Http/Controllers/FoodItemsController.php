@@ -53,9 +53,8 @@ class FoodItemsController extends Controller
     public function SellerMenu(Request $request)
     {
         try {
-
-            $user_id = Auth::user()->id;
-            $store_id = Store::where('user_id', $user_id)->first()->id;
+            // $user_id = Auth::user()->id;
+            $store_id = Store::where('user_id', Auth::id())->first()->id;
             $getFoodItems = FoodItems::where('store_id', $store_id)->get();
             return response()->json(["success" => true, "items" => $getFoodItems, "status" => 200] );
         } catch (\Throwable $th) {

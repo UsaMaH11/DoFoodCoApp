@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('profile_picture')->nullable();
             $table->string('location');
             $table->tinyInteger('isEmailVerified')->default(0);
+            $table->tinyInteger('isRequestedToBecomeCook')->default(0);
             $table->tinyInteger('isPhoneVerified')->default(0);
             $table->tinyInteger('isIdVerified')->default(0);
             $table->rememberToken();
