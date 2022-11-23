@@ -28,7 +28,10 @@ class User extends Authenticatable
         'isEmailVerified',
         'isPhoneVerified',
         'isIdVerified',
-        'otp'
+        'otp',
+        'dob',
+        'gender',
+        'id_number'
     ];
 
     public function messages()

@@ -27,6 +27,9 @@ return new class extends Migration
             $table->tinyInteger('isEmailVerified')->default(0);
             $table->tinyInteger('isPhoneVerified')->default(0);
             $table->tinyInteger('isIdVerified')->default(0);
+            $table->string("dob")->nullable();
+            $table->enum("gender", ['male', 'female', 'not interested to answer'] )->default('male');
+            $table->string("id_number")->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

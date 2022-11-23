@@ -108,30 +108,11 @@ class AuthController extends Controller
     public function updateUserInfo(Request $request)
     {
         try {
-            if ($request->get('index') == "profile_picture") {
-                $index = $request->get('index');
-                // $this->validate($request, [
-                //     'profile_picture' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-                // ]);
-                $image_path = $request->file('value')->store('public');
-                $update = User::where('id',Auth::user()->id)->update([
-                        $index => $image_path
-                ]);
-            }
-                else{
-                     $index = $request->get('index');
-                    $value = $request->get('value');
-                    //   $company_id = 1;
-
-                    $update = User::where('id',Auth::user()->id)->update([
-                        $index => $value
-                ]);
-
-                }
-            // return $request->get('index');
+                
+                $updateUserInfo = User::where('id',Auth::user()->id)->update($request->all());
            
                 $data = User::find(Auth::user()->id);
-                if($update){
+                if($data){
                     return response()->json(['response'=>200,'data' => $data, 'status' => true]);
                 }else{
                     return response()->json(['response'=>401,'message' => 'there was some error updating data','status'=>false]);
