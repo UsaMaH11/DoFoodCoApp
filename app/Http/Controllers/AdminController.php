@@ -13,13 +13,14 @@ class AdminController extends Controller
 {
     public function getUsersList()
     {
-        return User::whereIn('type', ['buyer', 'seller'])->get();
+        return User::whereIn('type', ['buyer', 'seller'])->latest()->get();
     }
     public function getStoreList()
     {
-        return Store::with('User')->get();
+        return Store::with('User')->latest()->get();
     }
     public function requestOpenStore(Request $request){
+        
         $attributeNames = [
             'store_name' => 'Store Name',
             'location' => 'Locatin Name',
@@ -30,7 +31,7 @@ class AdminController extends Controller
             'store_name' => 'required|string',
             'location' => 'required|string',
             'license' => 'required',
-            'image' => 'required|image|mimes:jpg,png,jpeg,|max:2048',
+            'image' => 'required|mimes:jpg,png,jpeg|max:2048',
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -58,6 +59,9 @@ class AdminController extends Controller
             $final_photosfilename[] = $fileName;
             $store->image = $fileName;
             $store->save();
+            $user = User::find(Auth::id());
+            $user->isRequestedToBecomeCook = 1;
+            $user->update();
             return response()->json(["status" => "success", "message" => "Request has been sent successfully"]);
         }
     }
@@ -65,13 +69,16 @@ class AdminController extends Controller
         $store = Store::find($store_id);
         $store->status = 'active';
         if($store->update()){
+            $user = User::find($store->user_id);
+            $user->type = 'seller';
+            $user->update();
             return response()->json(["success" => true]);
         }else{
             return response()->json(["success" => false]);
         }
     }
     public function foodList(){
-        return FoodItems::with('Store')->get();
+        return FoodItems::with('Store')->latest()->get();
     }
     public function activeFood($food_id){
         $food = FoodItems::find($food_id);
