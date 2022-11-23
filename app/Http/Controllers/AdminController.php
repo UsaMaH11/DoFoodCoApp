@@ -13,11 +13,11 @@ class AdminController extends Controller
 {
     public function getUsersList()
     {
-        return User::whereIn('type', ['buyer', 'seller'])->get();
+        return User::whereIn('type', ['buyer', 'seller'])->latest()->get();
     }
     public function getStoreList()
     {
-        return Store::with('User')->get();
+        return Store::with('User')->latest()->get();
     }
     public function requestOpenStore(Request $request){
         
@@ -69,13 +69,16 @@ class AdminController extends Controller
         $store = Store::find($store_id);
         $store->status = 'active';
         if($store->update()){
+            $user = User::find($store->user_id);
+            $user->type = 'seller';
+            $user->update();
             return response()->json(["success" => true]);
         }else{
             return response()->json(["success" => false]);
         }
     }
     public function foodList(){
-        return FoodItems::with('Store')->get();
+        return FoodItems::with('Store')->latest()->get();
     }
     public function activeFood($food_id){
         $food = FoodItems::find($food_id);
