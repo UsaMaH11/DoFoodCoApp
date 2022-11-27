@@ -10,16 +10,28 @@ class FoodItems extends Model
     use HasFactory;
     protected $fillable = [
         'food_title',
-        'user_id',
+        'store_id',
         'description',
         'cook_time',
         'type',
         'food_status',
         'images',
-        'price'
+        'price',
+        'rating',
+        'order_limit',
+        'portion_size',
+        'ingredients',
+        'spcice_level',
+        'comments',
+        'expires_in'
     ];
     public function Store()
     {
         return $this->belongsTo(Store::class);
     }
+
+      protected $casts = [
+        'portion_size' => 'array',
+        'ingredients' => 'array'
+    ];
 }

@@ -31,7 +31,9 @@ class User extends Authenticatable
         'otp',
         'dob',
         'gender',
-        'id_number'
+        'id_number',
+        'zip',
+        'availibility_days'
     ];
 
     public function messages()
@@ -56,6 +58,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'availibility_days' => 'array'
+
     ];
    
 }

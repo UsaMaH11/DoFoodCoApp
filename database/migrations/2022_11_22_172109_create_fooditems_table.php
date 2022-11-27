@@ -24,6 +24,13 @@ return new class extends Migration
             $table->enum('status', ['approved', 'processing', 'rejected'])->default('processing');
             $table->text('images')->nullable();
             $table->integer('price');
+            $table->integer('order_limit');
+            $table->json('portion_size');
+            $table->json('ingredients');
+            $table->string('spcice_level')->nullable();
+            $table->text('comments')->nullable();
+            $table->integer('rating')->nullable();
+            $table->dateTime('expires_in', $precision = 0);
             $table->timestamps();
             
         });

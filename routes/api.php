@@ -39,6 +39,7 @@ Route::get('/AllMenu', [FoodItemsController::class, 'AllMenu']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/addnewmenuitem', [FoodItemsController::class, 'index']);
     Route::get('/sellermenu', [FoodItemsController::class, 'SellerMenu']);
+    Route::get('/getfoodbyid', [FoodItemsController::class, 'getFoodById']);
     Route::get('/chat', 'ChatsController@index');
     Route::get('messages', 'ChatsController@fetchMessages');
     Route::post('messages', 'ChatsController@sendMessage');

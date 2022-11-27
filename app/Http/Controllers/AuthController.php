@@ -40,6 +40,7 @@ class AuthController extends Controller
                     'location' => $request['location'],
                     'profile_picture' => $image_path,
                     
+                    
                 ]);
             } else {
                 $user = new User([
@@ -193,35 +194,6 @@ class AuthController extends Controller
         }
     }
 
-    // public function PythonScript(Request $request)
-    // {
-    //     try {
-            
-    //         $this->validate($request, [
-    //                 'faceImage' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-    //                 'idImage' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
-    //             ]);
-
-    //         $faceImage = $request->file('faceImage');
-    //         $idImage = $request->file('idImage');
-
-    //     $process = new Process(['python3', 'python/main.py', $faceImage,$idImage]);
-    //     $process->run();
-
-    //     if (!$process->isSuccessful()) {
-    //         throw new ProcessFailedException($process);
-    //     }
-    //     // $output = json_decode($process->getOutput(), true);
-    //     // $jsonData = stripslashes(html_entity_decode($process->getOutput()));
-    //     $output = json_decode($process->getOutput(), true);
-    //     return response()->json(["status" => 200 , "data"=>$output , "success" => true]);
-
-    //     dd($data);
-    //     } catch (\Throwable $th) {
-    //         throw $th;
-    //     }
-    
-    //   }
      public function sendMobileOtp(Request $request)
     {
         $user = Auth::user();
@@ -289,5 +261,7 @@ class AuthController extends Controller
         }
        
     }
+
+
 
 }

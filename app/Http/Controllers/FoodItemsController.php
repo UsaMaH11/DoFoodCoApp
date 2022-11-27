@@ -21,7 +21,12 @@ class FoodItemsController extends Controller
             'type' => 'required',
             'status' => 'required',
             'price' => 'required',
-            'multiImages' => 'required'
+             'order_limit' => 'required',
+             'portion_size' =>'required',
+             'ingredients' =>'required',
+             'spice_level' => 'required',
+            'multiImages' => 'required',
+            'expires_in' =>'required'
         ]);
         try {
             $foodItem = new FoodItems();
@@ -32,6 +37,12 @@ class FoodItemsController extends Controller
             $foodItem->type = $data['type'];
             $foodItem->status = $data['status'];
             $foodItem->price = $data['price'];
+            $foodItem->order_limit = $data['order_limit'];
+            $foodItem->portion_size = $data['portion_size'];
+            $foodItem->ingredients =$data['ingredients'];
+            $foodItem->spice_level = $data['spice_level'];
+            $foodItem ->comments = $request->comments;
+            $foodItem->expires_in = $data['expires_in'];
             foreach($data['multiImages'] as $img)
             {
                 $file = $img;
@@ -53,10 +64,13 @@ class FoodItemsController extends Controller
     public function SellerMenu(Request $request)
     {
         try {
-            // $user_id = Auth::user()->id;
+            $user = Auth::user();
+            $data = [];
             $store_id = Store::where('user_id', Auth::id())->first()->id;
-            $getFoodItems = FoodItems::where('store_id', $store_id)->get();
-            return response()->json(["success" => true, "items" => $getFoodItems, "status" => 200] );
+            $getFoodItems = FoodItems::where('store_id', $store_id)->paginate(5);
+            $data['sellerMenu'] = $getFoodItems;
+            $data['userData'] = $user;
+            return response()->json(["success" => true, "userData" => $data, "status" => 200] );
         } catch (\Throwable $th) {
             return response()->json(["status" => false, "message" => "something went wrong", $th]);
         }
@@ -65,10 +79,41 @@ class FoodItemsController extends Controller
     public function AllMenu(Request $request)
     {
         try {
-            $getFoodItems = FoodItems::all();
+            $getFoodItems = FoodItems::paginate(5);
             return response()->json(["status" => "success", "items" => $getFoodItems]);
         } catch (\Throwable $th) {
             return response()->json(["status" => "error", "message" => "something went wrong", $th]);
         }
+    }
+
+    public function updateFoodMenu(Request $request){
+           try {
+                // $store_id = Store::where('user_id', Auth::user()->id)->first()->id;
+                $updateUserInfo = FoodItems::where('id',$request->id)->update($request->all());
+           
+                $data = FoodItems::find($request->id);
+                if($data){
+                    return response()->json(['response'=>200,'data' => $data, 'status' => true]);
+                }else{
+                    return response()->json(['response'=>401,'message' => 'there was some error updating data','status'=>false]);
+                }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function getFoodById(Request $request) {
+        try {
+        $data = FooItems::where(id,$request->item_id)->first();
+        if($data){
+                    return response()->json(['response'=>200,'data' => $data, 'status' => true]);
+                }else{
+                    return response()->json(['response'=>401,'message' => 'there was some error getting data','status'=>false]);
+                }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
+
     }
 }
