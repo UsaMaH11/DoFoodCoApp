@@ -113,7 +113,13 @@ class FoodItemsController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
-
-
+    }
+    public function search($keyword){
+        $store = Store::where('store_name', 'like', "%{$keyword}%")->get();
+        $foodItem = FoodItems::where('food_title', 'like', "%{$keyword}%")->orwhere('type', 'like', "%{$keyword}%")->get();
+        return response()->json([
+            'store' => $store,
+            'food' => $foodItem,
+        ]);
     }
 }
