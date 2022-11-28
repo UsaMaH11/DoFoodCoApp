@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post("/updateUserInfo", [AuthController::class, 'updateUserInfo']);
     Route::post("/updateFoodInfo", [FoodItemsController::class, 'updateFoodMenu']);
     Route::post("/availibilitydays", [FoodItemsController::class, 'availibilityDays']);
+    Route::post("/updateavailibilitydays", [FoodItemsController::class, 'updateAvailibilityDays']);
 
 
 
@@ -60,4 +61,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
     
 });
-Route::get('/search/{keyword}', [FoodItemsController::class, 'search']);
+Route::get('/search', [FoodItemsController::class, 'search']);

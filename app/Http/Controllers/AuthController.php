@@ -267,14 +267,12 @@ class AuthController extends Controller
         $attributeNames = [
             'password' => 'Password',
             'confirm_password' => 'Confirm Password',
-            'user_id' => 'User id',
         ];
         $messages = [];
 
         $rules = array(
             'password'          => 'required|min:6',
             'confirm_password'  => 'required|same:password',
-            'user_id'  => 'required',
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -289,7 +287,7 @@ class AuthController extends Controller
         }
         else
         {
-            $userExist = User::find($request->user_id);
+            $userExist = User::find(Auth::user()->id);
 
             if($userExist)
             {

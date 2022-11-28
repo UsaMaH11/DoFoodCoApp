@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Models\Store;
+use App\Models\AvailibilityDay;
 
 class FoodItemsController extends Controller
 {
@@ -128,13 +129,62 @@ class FoodItemsController extends Controller
             throw $th;
         }
     }
-    public function search($keyword){
+    public function search(Request $request){
+        $keyword = $request->keyword;
         $store = Store::where('store_name', 'like', "%{$keyword}%")->get();
         $foodItem = FoodItems::where('food_title', 'like', "%{$keyword}%")->orwhere('type', 'like', "%{$keyword}%")->get();
         return response()->json([
+            'response'=>200,
             'store' => $store,
             'food' => $foodItem,
-        ]);
+             'status' => true
+        ]); 
     }
+
+    public function availibilityDays(Request $request){
+        try {
+            // return Auth::user()->id;
+            $data = new AvailibilityDay();
+           
+            $data->store_id =Store::where('user_id', Auth::user()->id)->first()->id;
+
+            $data->monday = $request->monday;
+            $data->tuesday = $request->tuesday;
+            $data->wednesday = $request->wednesday;
+            $data->thrusday = $request->thursday;
+            $data->friday = $request->friday;
+            $data->saturday = $request->saturday;
+            $data->sunday = $request->sunday;
+            $data->save();
+            return response()->json(['response'=>201,'data' => $data, 'status' => true]);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function updateAvailibilityDays(Request $request){
+        try {
+            // return Auth::user()->id;
+            // $data = new AvailibilityDay();
+           $store_id =Store::where('user_id', Auth::user()->id)->first()->id;
+           AvailibilityDay::where('store_id',$store_id)->update([
+             "monday" => $request->monday,
+            "tuesday" => $request->tuesday,
+            "wednesday" => $request->wednesday,
+            "thrusday" => $request->thursday,
+            "friday" => $request->friday,
+            "saturday" => $request->saturday,
+            "sunday" => $request->sunday
+            ]);
+             $data = AvailibilityDay::where('store_id',$store_id)->first();
+            return response()->json(['response'=>200,'data' => $data, 'status' => true]);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+     
+    }
+
     
 }
