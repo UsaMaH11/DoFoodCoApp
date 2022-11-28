@@ -30,7 +30,7 @@ class AdminController extends Controller
         $rules = array(
             'store_name' => 'required|string',
             'location' => 'required|string',
-            'license' => 'required',
+            'license_id' => 'required',
             'image' => 'required|mimes:jpg,png,jpeg|max:2048',
         );
 
@@ -48,7 +48,7 @@ class AdminController extends Controller
             $store = new Store();
             $store->store_name = $request->store_name;
             $store->user_id = Auth::user()->id;
-            $store->license_id = $request->license_id;
+            // $store->license_id = $request->license_id;
             $store->location = $request->location;
             $store->status = 'inactive';
             $file = $request->image;

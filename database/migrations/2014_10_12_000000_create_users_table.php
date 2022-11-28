@@ -31,8 +31,7 @@ return new class extends Migration
             $table->string("dob")->nullable();
             $table->enum("gender", ['male', 'female', 'not interested to answer'] )->default('male');
             $table->string("id_number")->nullable();
-            $table->integer('zip');
-            $table->json('availibility_days');
+            $table->integer('zip')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

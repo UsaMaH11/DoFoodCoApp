@@ -45,6 +45,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('messages', 'ChatsController@sendMessage');
     Route::get("/isLoggedIn", [AuthController::class, 'userInfo']);
     Route::post("/updateUserInfo", [AuthController::class, 'updateUserInfo']);
+    Route::post("/updateFoodInfo", [FoodItemsController::class, 'updateFoodMenu']);
+    Route::post("/availibilitydays", [FoodItemsController::class, 'availibilityDays']);
+
+
 
     Route::post('/otp', [AuthController::class, 'requestOtp']);
     Route::post('verifyotp', [AuthController::class, 'verifyOtp']);
