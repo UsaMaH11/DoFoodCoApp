@@ -9,10 +9,12 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Twilio\Rest\Client;
+use Validator;
 
 class AuthController extends Controller
 {
@@ -258,8 +260,57 @@ class AuthController extends Controller
         return response()->json(["error"=> "You entered wrong code."]); 
         } catch (\Throwable $th) {
             throw $th;
+        }  
+    }
+    public function resetPassword(Request $request)
+    {
+        $attributeNames = [
+            'password' => 'Password',
+            'confirm_password' => 'Confirm Password',
+            'user_id' => 'User id',
+        ];
+        $messages = [];
+
+        $rules = array(
+            'password'          => 'required|min:6',
+            'confirm_password'  => 'required|same:password',
+            'user_id'  => 'required',
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $validator->setAttributeNames($attributeNames);
+
+        if ($validator->fails()){
+            return response()->json([
+                'errors' => $validator->errors()->all(),
+                "type" => "errors",
+            ], 200);
         }
-       
+        else
+        {
+            $userExist = User::find($request->user_id);
+
+            if($userExist)
+            {
+                $userExist->password = Hash::make($request->password);
+                $userExist->update();
+                return response()->json([
+                    'success' => true,
+                    "message" => "Password Reset Successfully!",
+                    "type"    => "success",
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'success'   => true,
+                    'message'   => 'User not found!',
+                    'type'      => 'error',
+                ]);
+            }
+        }
+
     }
 
 

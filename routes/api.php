@@ -57,4 +57,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/request-open-store', [AdminController::class, 'requestOpenStore']);
 
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+    
 });
+Route::get('/search/{keyword}', [FoodItemsController::class, 'search']);
